@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "BrainMaster Quiz App",
+    "slug": "quiz-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#121212"
+      },
+      "package": "brainmaster.quizapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3fd228c2-a8e5-4a23-b88a-a01dfc0d96d3"
+      }
+    }
+  }
+}
