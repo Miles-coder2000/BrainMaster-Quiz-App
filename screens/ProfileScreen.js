@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, ScrollView } from 'react-native';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +11,7 @@ export default function ProfileScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [highScore, setHighScore] = useState(0);
   const [totalQuizzes, setTotalQuizzes] = useState(0);
+  const [badges, setBadges] = useState([]);
   const progress = new Animated.Value(0);
   const { user } = useAuth();
 
@@ -53,6 +54,14 @@ export default function ProfileScreen({ navigation }) {
         .eq('user_id', user.id);
 
       setTotalQuizzes(count || 0);
+
+      const { data: userBadgesData } = await supabase
+        .from('user_badges')
+        .select('badge_id, badges(icon, name, rarity)')
+        .eq('user_id', user.id)
+        .limit(6);
+
+      setBadges(userBadgesData || []);
     };
 
     const unsubscribe = navigation.addListener('focus', loadData);
@@ -60,7 +69,7 @@ export default function ProfileScreen({ navigation }) {
   }, [navigation, user]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>👤 {username}</Text>
 
       <View style={styles.card}>
@@ -104,19 +113,37 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </View>
 
+      {badges.length > 0 && (
+        <View style={styles.badgesSection}>
+          <View style={styles.badgesHeader}>
+            <Text style={styles.badgesTitle}>Recent Badges</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Badges')}>
+              <Text style={styles.viewAllText}>View All →</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.badgesGrid}>
+            {badges.slice(0, 6).map((item, index) => (
+              <View key={index} style={styles.badgeItem}>
+                <Text style={styles.badgeIconSmall}>{item.badges?.icon || '🏅'}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Home')}
       >
         <Text style={styles.buttonText}>← Back to Home</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f172a', padding: 20, justifyContent: 'center' },
-  title: { color: '#22c55e', fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
+  container: { flex: 1, backgroundColor: '#0f172a', padding: 20 },
+  title: { color: '#22c55e', fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 30, marginTop: 20 },
   card: { backgroundColor: '#1e293b', padding: 20, borderRadius: 15, alignItems: 'center', marginBottom: 20 },
   label: { color: '#9ca3af', fontSize: 14, marginBottom: 5 },
   value: { color: '#fff', fontSize: 48, fontWeight: 'bold' },
@@ -127,6 +154,13 @@ const styles = StyleSheet.create({
   statCard: { width: '48%', backgroundColor: '#1e293b', padding: 15, borderRadius: 10, alignItems: 'center', marginVertical: 5 },
   statValue: { color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 5 },
   statLabel: { color: '#9ca3af', fontSize: 12 },
-  button: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 10 },
+  badgesSection: { marginBottom: 30 },
+  badgesHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  badgesTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  viewAllText: { color: '#22c55e', fontSize: 14 },
+  badgesGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
+  badgeItem: { width: 60, height: 60, backgroundColor: '#1e293b', borderRadius: 30, alignItems: 'center', justifyContent: 'center', marginRight: 12, marginBottom: 12 },
+  badgeIconSmall: { fontSize: 32 },
+  button: { backgroundColor: '#3b82f6', padding: 15, borderRadius: 10, marginBottom: 20 },
   buttonText: { color: '#fff', fontSize: 16, textAlign: 'center', fontWeight: 'bold' },
 });

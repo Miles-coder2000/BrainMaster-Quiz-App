@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
 
@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }) {
   }, [navigation, user]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <Text style={styles.title}>🧠 Brain Master Quiz</Text>
       <Text style={styles.username}>Welcome, {username}!</Text>
 
@@ -45,6 +45,7 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.stat}>🔥 Streak: {streak}</Text>
       </View>
 
+      <Text style={styles.sectionTitle}>Quick Play</Text>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: '#22c55e' }]}
         onPress={() => navigation.navigate('Category')}
@@ -53,24 +54,69 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={[styles.button, { backgroundColor: '#f59e0b' }]}
+        onPress={() => navigation.navigate('DailyChallenge')}
+      >
+        <Text style={styles.buttonText}>🎯 Daily Challenge</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.sectionTitle}>Progress & Stats</Text>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#3b82f6' }]}
+          onPress={() => navigation.navigate('Profile')}
+        >
+          <Text style={styles.buttonText}>👤 Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#8b5cf6' }]}
+          onPress={() => navigation.navigate('QuizHistory')}
+        >
+          <Text style={styles.buttonText}>📊 History</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.sectionTitle}>Rewards & Shop</Text>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#10b981' }]}
+          onPress={() => navigation.navigate('Store')}
+        >
+          <Text style={styles.buttonText}>🛒 Store</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#f59e0b' }]}
+          onPress={() => navigation.navigate('DailyRewards')}
+        >
+          <Text style={styles.buttonText}>🎁 Rewards</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.sectionTitle}>Achievements</Text>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#ec4899' }]}
+          onPress={() => navigation.navigate('Achievements')}
+        >
+          <Text style={styles.buttonText}>🏅 Achievements</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.smallButton, { backgroundColor: '#06b6d4' }]}
+          onPress={() => navigation.navigate('Badges')}
+        >
+          <Text style={styles.buttonText}>🎖️ Badges</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.sectionTitle}>Community</Text>
+      <TouchableOpacity
         style={[styles.button, { backgroundColor: '#8b5cf6' }]}
         onPress={() => navigation.navigate('Leaderboard')}
       >
         <Text style={styles.buttonText}>🏆 Leaderboard</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#f59e0b' }]}
-        onPress={() => navigation.navigate('Achievements')}
-      >
-        <Text style={styles.buttonText}>🎯 Achievements</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#3b82f6' }]}
-        onPress={() => navigation.navigate('Profile')}
-      >
-        <Text style={styles.buttonText}>👤 Profile</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -79,7 +125,7 @@ export default function HomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>🚪 Logout</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -87,15 +133,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f172a',
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  contentContainer: {
     padding: 20,
+    alignItems: 'center',
   },
   title: {
     color: '#22c55e',
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginTop: 20,
   },
   username: {
     color: '#9ca3af',
@@ -104,6 +152,7 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     marginBottom: 30,
+    width: '100%',
   },
   stat: {
     color: '#fff',
@@ -111,15 +160,36 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     textAlign: 'center',
   },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 12,
+    width: '100%',
+    textAlign: 'left',
+  },
   button: {
-    width: '80%',
+    width: '100%',
     padding: 15,
     borderRadius: 12,
-    marginVertical: 8,
+    marginVertical: 6,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 6,
+  },
+  smallButton: {
+    width: '48%',
+    padding: 15,
+    borderRadius: 12,
+    marginVertical: 6,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
     fontWeight: 'bold',
   },

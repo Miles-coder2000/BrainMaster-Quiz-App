@@ -15,6 +15,10 @@ import SignUpScreen from './screens/SignUpScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
 import AboutScreen from './screens/AboutScreen';
+import DailyChallengeScreen from './screens/DailyChallengeScreen';
+import QuizHistoryScreen from './screens/QuizHistoryScreen';
+import BadgesScreen from './screens/BadgesScreen';
+import DailyRewardsScreen from './screens/DailyRewardsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +55,10 @@ function Navigation() {
             <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
             <Stack.Screen name="Achievements" component={AchievementsScreen} />
             <Stack.Screen name="About" component={AboutScreen} />
+            <Stack.Screen name="DailyChallenge" component={DailyChallengeScreen} options={{ title: 'Daily Challenge' }} />
+            <Stack.Screen name="QuizHistory" component={QuizHistoryScreen} options={{ title: 'Quiz History' }} />
+            <Stack.Screen name="Badges" component={BadgesScreen} options={{ title: 'Badge Collection' }} />
+            <Stack.Screen name="DailyRewards" component={DailyRewardsScreen} options={{ title: 'Daily Rewards' }} />
           </>
         )}
       </Stack.Navigator>
